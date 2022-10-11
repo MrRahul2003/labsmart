@@ -60,12 +60,12 @@
                 <h2>Edit Database</h2>
 
                 <?php
-                    $sql = $conn->prepare("SELECT * FROM `test_database` WHERE database_id='$database_id'");
-                    $sql -> execute();
-                    $result = $sql->get_result();
+                    $sql1 = $conn->prepare("SELECT * FROM `test_database` WHERE database_id='$database_id'");
+                    $sql1 -> execute();
+                    $result1 = $sql1->get_result();
                     
-                    $row = $result -> fetch_assoc();
-                    $rowNo = mysqli_num_rows($result);
+                    $row1 = $result1 -> fetch_assoc();
+                    $rowNo = mysqli_num_rows($result1);
                 ?>
 
                 <form class="card mt-4" action="Update_Database.php" method="POST">
@@ -79,35 +79,42 @@
                         <div class="form-group">
                             <label class="mx-2"> Name </label>
                             <input class="form-control" type="text" name="database_name" id="database_name"
-                                placeholder="Add Category Name" value="<?php echo $row['database_name'] ?>" required>
+                                placeholder="Add Category Name" value="<?php echo $row1['database_name'] ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label class="mx-2"> Short Name </label>
                             <input class="form-control" type="text" name="database_shortname" id="database_shortname"
-                                placeholder="Add Short Category" value="<?php echo $row['database_shortname'] ?>" required>
+                                placeholder="Add Short Category" value="<?php echo $row1['database_shortname'] ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label class="mx-2"> Category </label>
                             <select class="form-select" name="database_category" id="database_category"
                                 aria-label="Default select example">
-                                <option value="-" <?php
-                                 if($row['database_category'] == '-')
-                                 { echo "Selected";}
-                                ?>>Open this select menu</option>
-                                <option value="Haematology" <?php
-                                 if($row['database_category'] == 'Haematology')
-                                 { echo "Selected";}
-                                ?>>Haematology</option>
-                                <option value="Biochemistry" <?php
-                                 if($row['database_category'] == 'Biochemistry')
-                                 { echo "Selected";}
-                                ?>>Biochemistry</option>
-                                <option value="Serology & Immunology" <?php
-                                 if($row['database_category'] == 'Serology & Immunology')
-                                 { echo "Selected";}
-                                ?>>Serology & Immunology</option>
+
+                                <?php
+                                $database_category = $row1['database_category'];
+                                $sql = "SELECT * FROM `test_categories`";
+                                $result = mysqli_prepare($conn,$sql);
+                                mysqli_stmt_bind_result($result, $login_user_id, $category_id, 
+                                $category_name, $category_edited_name, $category_shortname, $category_date, $category_time);
+                                mysqli_stmt_execute($result);  // stores result
+                                mysqli_stmt_store_result($result);
+
+                                if (mysqli_stmt_num_rows($result)>0) {
+                                    while ($row = mysqli_stmt_fetch($result)) {
+                                        echo '<option value="'.$category_name.'"'; 
+                                ?>
+                                <?php
+                                         if($category_name == $database_category)
+                                         { echo "Selected"; };
+                                ?>
+                                <?php
+                                        echo ">$category_name </option>";
+                                    }
+                                }
+                                ?>
                             </select>
                         </div>
 
@@ -116,19 +123,19 @@
                             <select class="form-select" name="database_unit" id="database_unit"
                                 aria-label="Default select example">
                                 <option value="-" <?php
-                                 if($row['database_unit'] == '-')
+                                 if($row1['database_unit'] == '-')
                                  { echo "Selected";}
                                 ?>>Open this select menu</option>
                                 <option value="%" <?php
-                                 if($row['database_unit'] == '%')
+                                 if($row1['database_unit'] == '%')
                                  { echo "Selected";}
                                 ?>>%</option>
                                 <option value="AU/mL" <?php
-                                 if($row['database_unit'] == 'AU/mL')
+                                 if($row1['database_unit'] == 'AU/mL')
                                  { echo "Selected";}
                                 ?>>AU/mL</option>
                                 <option value="cumm" <?php
-                                 if($row['database_unit'] == 'cumm')
+                                 if($row1['database_unit'] == 'cumm')
                                  { echo "Selected";}
                                 ?>>cumm</option>
                             </select>
@@ -139,19 +146,19 @@
                             <select class="form-select" name="database_input_type" id="database_input_type"
                                 aria-label="Default select example">
                                 <option value="-" <?php
-                                 if($row['database_input_type'] == '-')
+                                 if($row1['database_input_type'] == '-')
                                  { echo "Selected";}
                                 ?>>Open this select menu</option>
                                 <option value="Numeric" <?php
-                                 if($row['database_input_type'] == 'Numeric')
+                                 if($row1['database_input_type'] == 'Numeric')
                                  { echo "Selected";}
                                 ?>>Numeric</option>
                                 <option value="Single Line" <?php
-                                 if($row['database_input_type'] == 'Single Line')
+                                 if($row1['database_input_type'] == 'Single Line')
                                  { echo "Selected";}
                                 ?>>Single Line</option>
                                 <option value="Paragraph" <?php
-                                 if($row['database_input_type'] == 'Paragraph')
+                                 if($row1['database_input_type'] == 'Paragraph')
                                  { echo "Selected";}
                                 ?>>Paragraph</option>
                             </select>
