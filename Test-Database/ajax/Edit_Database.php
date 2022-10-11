@@ -60,37 +60,40 @@
                 <h2>Edit Database</h2>
 
                 <?php
-                    $sql = "SELECT * FROM `test_database` WHERE database_id='$database_id'";
-                    $result = mysqli_query($conn,$sql) OR Die('query Failed');
-                    $row = mysqli_fetch_assoc($result);
+                    $sql = $conn->prepare("SELECT * FROM `test_database` WHERE database_id='$database_id'");
+                    $sql -> execute();
+                    $result = $sql->get_result();
+                    
+                    $row = $result -> fetch_assoc();
+                    $rowNo = mysqli_num_rows($result);
                 ?>
 
-                <form class="card mt-4" action="Update_Category.php" method="POST">
+                <form class="card mt-4" action="Update_Database.php" method="POST">
 
                     <div class="card-body">
                         <div class="form-group">
                             <input class="form-control" type="hidden" value="<?php echo $database_id ?>"
-                                name='database_id'>
+                                name='database_id' required>
                         </div>
 
                         <div class="form-group">
                             <label class="mx-2"> Name </label>
                             <input class="form-control" type="text" name="database_name" id="database_name"
-                                placeholder="Add Category Name" value="<?php echo $row['database_name'] ?>">
+                                placeholder="Add Category Name" value="<?php echo $row['database_name'] ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label class="mx-2"> Short Name </label>
                             <input class="form-control" type="text" name="database_shortname" id="database_shortname"
-                                placeholder="Add Short Category" value="<?php echo $row['database_shortname'] ?>">
+                                placeholder="Add Short Category" value="<?php echo $row['database_shortname'] ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label class="mx-2"> Category </label>
                             <select class="form-select" name="database_category" id="database_category"
                                 aria-label="Default select example">
-                                <option value="Open this select menu" <?php
-                                 if($row['database_category'] == 'Open this select menu')
+                                <option value="-" <?php
+                                 if($row['database_category'] == '-')
                                  { echo "Selected";}
                                 ?>>Open this select menu</option>
                                 <option value="Haematology" <?php
@@ -112,8 +115,8 @@
                             <label class="mx-2"> Unit </label>
                             <select class="form-select" name="database_unit" id="database_unit"
                                 aria-label="Default select example">
-                                <option value="Open this select menu" <?php
-                                 if($row['database_unit'] == 'Open this select menu')
+                                <option value="-" <?php
+                                 if($row['database_unit'] == '-')
                                  { echo "Selected";}
                                 ?>>Open this select menu</option>
                                 <option value="%" <?php
@@ -135,8 +138,8 @@
                             <label class="mx-2"> Input type </label>
                             <select class="form-select" name="database_input_type" id="database_input_type"
                                 aria-label="Default select example">
-                                <option value="Open this select menu" <?php
-                                 if($row['database_input_type'] == 'Open this select menu')
+                                <option value="-" <?php
+                                 if($row['database_input_type'] == '-')
                                  { echo "Selected";}
                                 ?>>Open this select menu</option>
                                 <option value="Numeric" <?php

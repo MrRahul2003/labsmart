@@ -11,7 +11,7 @@
                 <div class="modal-body">
                     <div class="py-1">
 
-                        <form class="form" action="Test_Categories/Insert_Category.php" method="POST">
+                        <form class="form" id="formData">
                             <div class="row">
                                 <div class="col">
 
@@ -19,13 +19,13 @@
                                         <div class="col">
                                             <div class="form-group mt-2">
                                                 <label class="mx-2"> Name </label>
-                                                <input class="form-control" type="text" name="category_name"
-                                                    placeholder="Add Category Name">
+                                                <input class="form-control" type="text" name="category_name" id="category_name"
+                                                    placeholder="Add Category Name" required>
                                             </div>
                                             <div class="form-group mt-2">
                                                 <label class="mx-2"> Short Name </label>
-                                                <input class="form-control" type="text" name="category_shortname"
-                                                    placeholder="Add Short Category">
+                                                <input class="form-control" type="text" name="category_shortname" id="category_shortname"
+                                                    placeholder="Add Short Category" required>
                                             </div>
                                         </div>
                                     </div>
@@ -35,7 +35,7 @@
 
                             <div class="row mt-2">
                                 <div class="col d-flex justify-content-end">
-                                    <button type="submit" name="insert" class="btn btn-primary">Add Now ! </button>
+                                    <button type="submit" id="insertBtn" name="insert" class="btn btn-primary">Add Now ! </button>
                                 </div>
                             </div>
                         </form>

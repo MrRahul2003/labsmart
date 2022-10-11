@@ -50,16 +50,26 @@
 
     <?php include 'Modals/_insert_modal.php' ?>
 
-    <div class="container">
+    <div class="container" id="category_main_container">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <div class="mb-3">
                     <?php 
-                        $sql = 'SELECT * FROM `test_categories`';
-                        $result = mysqli_query($conn,$sql) OR Die('query Failed');
-                        $rowNo = mysqli_num_rows($result);
+                        $sql = "SELECT * FROM `test_categories`";
+                        $result = mysqli_prepare($conn,$sql);
+                        mysqli_stmt_bind_result($result, $login_user_id, $category_id, 
+                        $category_name, $category_edited_name, $category_shortnamem, $category_date, $category_time);
+                        mysqli_stmt_execute($result);  // stores result
+                        mysqli_stmt_store_result($result);
+
+                        $rowNo = mysqli_stmt_num_rows($result);
+                        $row = mysqli_stmt_fetch($result)
+                        // echo "<pre>";
+                        // print_r($result);
+                        // echo "</pre>";
                     ?>
-                    <h1 class="card-title">Test Categories <span class="text-muted fw-normal ms-2">(<?php echo $rowNo ?>)</span></h1>
+                    <h1 class="card-title">Test Categories <span
+                            class="text-muted fw-normal ms-2">(<?php echo $rowNo ?>)</span></h1>
                 </div>
             </div>
             <div class="col-md-6">
@@ -87,34 +97,7 @@
                                     <th scope="col">Delete</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php 
-                                    $sql = 'SELECT * FROM `test_categories`';
-                                    $result = mysqli_query($conn,$sql) OR Die('query Failed');
-                                    if (mysqli_num_rows($result)>0) {
-                                        $i = 0;
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            $i++;
-                                            $category_id = $row['category_id'];
-                                            echo
-                                            '<tr>
-                                                <td>'.$i.'</td>
-                                                <td><a href="#" class="text-body">'.$row['category_edited_name'].'</a></td>
-                                                <td><span class="badge badge-soft-success mb-0">'.$row['category_shortname'].'</span></td>
-                                                <td>
-                                                    <a href="Test_Categories/Edit_Category.php?category_id='.$category_id.'" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Edit" class="px-2 text-primary"><i
-                                                            class="bx bx-pencil font-size-18"></i></a>
-                                                </td>
-                                                <td>
-                                                    <a href="Test_Categories/Delete_Category.php?category_id='.$category_id.'" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Delete" class="px-2 text-danger"><i
-                                                            class="bx bx-trash-alt font-size-18"></i></a>
-                                                </td>
-                                            </tr>';
-                                        }
-                                    }
-                                ?>
+                            <tbody id="tableData">
                             </tbody>
                         </table>
                     </div>
@@ -122,6 +105,79 @@
             </div>
         </div>
     </div>
+
+    <script src="../js/jquery.js"></script>
+    <script>
+    // displaying the records
+    $(document).ready(function() {
+        function display() {
+            $.ajax({
+                url: "ajax/displayAjax.php",
+                type: "POST",
+                success: function(data) {
+                    $("#tableData").html(data);
+                }
+            })
+        }
+        display();
+
+        // inserting the records after clicking insertBtn
+        $("#insertBtn").on("click", function() {
+            // e.preventDefault();
+
+            var category_name = $("#category_name").val();
+            var category_shortname = $("#category_shortname").val();
+
+            if (category_name == "" || category_shortname == "") {
+                console.log("Enter some values");
+            } else {
+                $.ajax({
+                    url: "ajax/insertAjax.php",
+                    type: "POST",
+                    data: {
+                        category_name: category_name,
+                        category_shortname: category_shortname
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data == 1) {
+                            display();
+                            $("#formData").trigger("reset");
+                            console.log("success");
+                        } else {
+                            console.log("unsuccess");
+                        }
+                    }
+                })
+            }
+        })
+
+        // Deleting the recordviewModal
+        $(document).on("click", "#deleteBtn", function() {
+            // e.preventDefault();
+            var category_id = $(this).data("category_id");
+            var element = this;
+            console.log(category_id);
+
+            $.ajax({
+                url: "ajax/deleteAjax.php",
+                type: "POST",
+                data: {
+                    category_id: category_id
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data == 1) {
+                        display();
+                        console.log("Deleted data");
+                    } else {
+                        console.log("Cannot delete data");
+                    }
+                }
+            })
+        })
+    })
+    </script>
 
 </body>
 

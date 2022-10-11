@@ -50,13 +50,16 @@
 
     <?php include 'Modals/_insert_modal.php'; ?>
 
-    <div class="container">
+    <div class="container" id="database_main_container">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <div class="mb-3">
                     <?php 
-                        $sql = 'SELECT * FROM `test_database`';
-                        $result = mysqli_query($conn,$sql) OR Die('query Failed');
+                        $sql = $conn->prepare("SELECT * FROM `test_database`");
+                        $sql -> execute();
+                        $result = $sql->get_result();
+                        
+                        $row = $result -> fetch_assoc();
                         $rowNo = mysqli_num_rows($result);
                     ?>
                     <h1 class="card-title">Test Database <span
@@ -116,6 +119,7 @@
 
         // inserting the records after clicking insertBtn
         $("#insertBtn").on("click", function() {
+            // e.preventDefault();
             var database_name = $("#database_name").val();
             var database_shortname = $("#database_shortname").val();
             var database_category = $("#database_category").val();
@@ -140,8 +144,8 @@
                     success: function(data) {
                         console.log(data);
                         if (data == 1) {
-                            // display();
-                            $("#formData").trigger("reset");
+                            display();
+                            // $("#formData").trigger("reset");
                             console.log("success");
                         } else {
                             console.log("unsuccess");
