@@ -55,56 +55,65 @@
     <div class="container modal-header">
         <h3 class="modal-title" id="staticBackdropLabel">Search Cases</h3>
     </div>
-    <form class=" my-2 " action="Update_Database.php" method="POST">
+    <form class="container my-2" action="Update_Database.php" id="filter_formData" method="POST">
 
-        <div class="container">
-            <div class="form-group">
+        <div class="row g-3">
+
+            <div class="col-md-6 form-group">
                 <label class="mx-2"> Reg. no. </label>
-                <input class="form-control" type="number" value="" name='database_id' placeholder="Add Reg.no" required>
+                <input class="form-control" id="regno" type="number" name='regno' placeholder="Add Reg.no" required>
             </div>
 
-            <div class="form-group">
-                <label class="mx-2"> Patiest First Name </label>
-                <input class="form-control" type="text" name="database_name" id="database_name"
-                    placeholder="Add Category Name" value="" required>
+            <div class="col-md-6 form-group">
+                <label class="mx-2"> Patiest Name </label>
+                <input class="form-control" type="text" name="patient_name" id="patient_name"
+                    placeholder="Add Patient Name" required>
             </div>
 
-            <div class="form-group">
+            <div class="col-md-4 form-group">
                 <label class="mx-2"> Referred by (active referrers) </label>
-                <input class="form-control" type="text" name="database_shortname" id="database_shortname"
-                    placeholder="Add Short Category" value="" required>
+                <select class="form-select" name="referred_by" id="referred_by" aria-label="Default select example">
+                    <option value="-">Open this select menu</option>
+                    <option value="labcase">Dr.Vivek</option>
+                    <option value="usgcase">Dr.Self</option>
+                </select>
             </div>
 
-            <div class="form-group">
+            <div class="col-md-4 form-group">
                 <label class="mx-2"> Case type </label>
-                <select class="form-select" name="database_unit" id="database_unit" aria-label="Default select example">
+                <select class="form-select" name="case_type" id="case_type" aria-label="Default select example">
                     <option value="-">Open this select menu</option>
+                    <option value="labcase">labcase</option>
+                    <option value="usgcase">usgcase</option>
                 </select>
             </div>
 
-            <div class="form-group">
+            <div class="col-md-4 form-group">
                 <label class="mx-2"> Collection centre </label>
-                <select class="form-select" name="database_unit" id="database_unit" aria-label="Default select example">
+                <select class="form-select" name="collection_center" id="collection_center"
+                    aria-label="Default select example">
                     <option value="-">Open this select menu</option>
+                    <option value="Main">Main</option>
                 </select>
             </div>
 
-            <div class="form-group">
+            <div class="col-md-6 form-group">
                 <label class="mx-2"> From </label>
                 <input class="form-control" type="date" id="case_from" name="case_from">
             </div>
 
-            <div class="form-group">
+            <div class="col-md-6 form-group">
                 <label class="mx-2"> To </label>
                 <input class="form-control" type="date" id="case_to" name="case_to">
             </div>
 
+
+        </div>
+        <div class="container mt-3">
+            <button class="btn btn-primary" type="submit" name="search" id="filter_searchBtn">Search</button>
+            <button class="btn btn-primary" type="submit" name="clear" id="filter_clearBtn">Clear</button>
         </div>
 
-        <div class="container mt-3">
-            <button class="btn btn-primary" type="submit" name="search">Search</button>
-            <button class="btn btn-primary" type="submit" name="clear">Clear</button>
-        </div>
 
     </form>
     <hr>

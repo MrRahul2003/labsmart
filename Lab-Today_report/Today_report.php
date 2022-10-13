@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>All Cases</title>
+    <title> Today Report </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css"
         integrity="sha512-pVCM5+SN2+qwj36KonHToF2p1oIvoU3bsqxphdOIWMYmgr4ZqD3t5DjKvvetKhXGc/ZG5REYTT6ltKfExEei/Q=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -18,7 +18,7 @@
     <style>
     body {
         margin-top: 20px;
-        background-color: #eee;
+        background-color: #fff;
     }
 
     .project-list-table {
@@ -27,16 +27,11 @@
     }
 
     .project-list-table tr {
-        background-color: #fff
+        background-color: #eee
     }
 
     .me-2 {
         margin-right: 0.5rem !important;
-    }
-
-    a {
-        color: #3b76e1;
-        text-decoration: none;
     }
 
     .badge-soft-success {
@@ -47,29 +42,48 @@
 </head>
 
 <body>
-
-    <?php include 'form/_search_cases.php' ?>
-
     <div class="container" id="category_main_container">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <?php 
-                        $sql = "SELECT * FROM `patient`";
-                        $result = mysqli_prepare($conn,$sql);
-                        mysqli_stmt_bind_result($result, $p_id, $title, 
-                        $fname, $lname, $aadhar, $email, $mobile, $years, $months, $p_days, 
-                        $p_address, $report, $gender, $p_date, $curr_time);
-                        mysqli_stmt_execute($result);  // stores result
-                        mysqli_stmt_store_result($result);
-
-                        $rowNo = mysqli_stmt_num_rows($result);
-                        $row = mysqli_stmt_fetch($result)
-                    ?>
-                    <h1 class="card-title">Test Categories <span
-                            class="text-muted fw-normal ms-2">(<?php echo $rowNo ?>)</span></h1>
+                    <h2 class="card-title"> All lab reports for today </h2>
                 </div>
             </div>
+        </div>
+
+        <div class="container modal-header">
+            <h3 class="modal-title" id="staticBackdropLabel">Search Cases</h3>
+        </div>
+        <form class="container my-2" action="Update_Database.php" id="filter_formData" method="POST">
+
+            <div class="row g-3">
+
+                <div class="col-md-6 form-group">
+                    <label class="mx-2"> Search in page </label>
+                    <input class="form-control" id="search_filter" type="text" name='search_filter'
+                        placeholder="Search by name/ surname/ regno/ gender">
+                </div>
+
+                <div class="col-md-6 form-group">
+                    <?php
+                        date_default_timezone_set('Asia/Kolkata');
+                        $date = date("Y-m-d");
+                    ?>
+                    <label class="mx-2"> Date </label>
+                    <input class="form-control" type="date" id="date_filter" name="date_filter"
+                        value="<?php echo $date; ?>">
+                </div>
+
+                <div class="container mt-3">
+                    <button class="btn btn-primary" type="submit" name="filter_searchBtn" id="filter_searchBtn">Search</button>
+                </div>
+
+            </div>
+        </form>
+        <hr>
+
+        <div class="container d-flex justify-content-center">
+            <h3 class="modal-title" id="staticBackdropLabel"> New reports </h3>
         </div>
         <div class="row">
             <div class="col-lg-12">
@@ -117,21 +131,21 @@
         // Searching the record of doctors and fetching them
         $(document).on("click", "#filter_searchBtn", function(e) {
             e.preventDefault();
-            var regno = $("#regno").val();
-            var patient_name = $("#patient_name").val();
-
-            // console.log(regno);
-            // console.log(patient_name);
+            var search_filter = $("#search_filter").val().trim();
+            var date_filter = $("#date_filter").val();
+            console.log(search_filter);
+            console.log(date_filter);
 
             function loadSearch(page) {
                 $.ajax({
-                    url: "ajax/filterAjax.php",
+                    url: "ajax/searchAjax.php",
                     type: "POST",
                     data: {
-                        regno: regno,
-                        patient_name: patient_name
+                        search_filter: search_filter,
+                        date_filter: date_filter
                     },
                     success: function(data) {
+                        console.log(data);
                         if (data) {
                             $("#tableData").html(data);
                         } else {}
@@ -140,11 +154,6 @@
             }
             loadSearch();
         })
-
-        $(document).on("click", "#filter_clearBtn",  function(e) {
-            $("#filter_formData").trigger("reset");
-        })
-
     })
     </script>
 

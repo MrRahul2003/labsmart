@@ -2,6 +2,7 @@
 include '../../Partials/Connect.php'
 ?>
 <?php
+
 $sql = "SELECT * FROM `patient`";
 $result = mysqli_prepare($conn,$sql);
 mysqli_stmt_bind_result($result, $p_id, $title, 
