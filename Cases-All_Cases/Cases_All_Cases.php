@@ -120,7 +120,7 @@
             var regno = $("#regno").val();
             var patient_name = $("#patient_name").val();
 
-            // console.log(regno);
+            console.log(regno);
             // console.log(patient_name);
 
             function loadSearch(page) {

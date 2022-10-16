@@ -27,7 +27,7 @@ if (mysqli_num_rows($result)>0) {
             <td>'.htmlentities("Rs.5100",ENT_NOQUOTES,'UTF-8').'</td>
             <td>'.htmlentities("Rs.5095",ENT_NOQUOTES,'UTF-8').'</td>
             <td>'.htmlentities("Rs.5",ENT_NOQUOTES,'UTF-8').'</td>
-            <td><span success mb-0">'.htmlentities($row['report'],ENT_NOQUOTES,'UTF-8').'</span></td>
+            <td><span class="badge bg-success"">'.htmlentities($row['report'],ENT_NOQUOTES,'UTF-8').'</span></td>
             <td>
                 <a href="ajax/Edit_Database.php?p_id='.$row['p_id'].'" data-p_id='.$row['p_id'].' data-bs-toggle="tooltip" data-bs-placement="top"
                     title="Edit" class="px-2 text-primary" id="editBtn"><i class="bx bx-pencil font-size-18"></i></a>
