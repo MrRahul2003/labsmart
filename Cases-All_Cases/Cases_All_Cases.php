@@ -119,9 +119,29 @@
             e.preventDefault();
             var regno = $("#regno").val();
             var patient_name = $("#patient_name").val();
+            var referred_by = $("#referred_by option:selected").val();
+            var case_type = $("#case_type option:selected").val();
+            var collection_center = $("#collection_center option:selected").val();
+
+            var case_from = new Date($('#case_from').val());
+            var day = case_from.getDate();
+            var month = case_from.getMonth() + 1;
+            var year = case_from.getFullYear();
+            case_from = [year, month, day].join('-');
+            
+            var case_to = new Date($('#case_to').val());
+            var day = case_to.getDate();
+            var month = case_to.getMonth() + 1;
+            var year = case_to.getFullYear();
+            case_to = [year, month, day].join('-');
 
             console.log(regno);
-            // console.log(patient_name);
+            console.log(patient_name);
+            console.log(referred_by);
+            console.log(case_type);
+            console.log(collection_center);
+            console.log(case_from);
+            console.log(case_to);
 
             function loadSearch(page) {
                 $.ajax({
@@ -129,9 +149,15 @@
                     type: "POST",
                     data: {
                         regno: regno,
-                        patient_name: patient_name
+                        patient_name: patient_name,
+                        referred_by: referred_by,
+                        case_type: case_type,
+                        collection_center: collection_center,
+                        case_from: case_from,
+                        case_to: case_to
                     },
                     success: function(data) {
+                        console.log(data);
                         if (data) {
                             $("#tableData").html(data);
                         } else {}
@@ -141,7 +167,7 @@
             loadSearch();
         })
 
-        $(document).on("click", "#filter_clearBtn",  function(e) {
+        $(document).on("click", "#filter_clearBtn", function(e) {
             $("#filter_formData").trigger("reset");
         })
 

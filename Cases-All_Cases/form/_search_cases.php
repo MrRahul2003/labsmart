@@ -74,8 +74,8 @@
                 <label class="mx-2"> Referred by (active referrers) </label>
                 <select class="form-select" name="referred_by" id="referred_by" aria-label="Default select example">
                     <option value="-">Open this select menu</option>
-                    <option value="labcase">Dr.Vivek</option>
-                    <option value="usgcase">Dr.Self</option>
+                    <option value="Dr.Vivek">Dr.Vivek</option>
+                    <option value="Dr.Self">Dr.Self</option>
                 </select>
             </div>
 

@@ -1,13 +1,30 @@
 <?php
 include '../../Partials/Connect.php';
 ?>
-
 <?php
 $regno = $_POST['regno'];
 $patient_name = $_POST['patient_name'];
+$referred_by = $_POST['referred_by'];
+$case_type = $_POST['case_type'];
+$collection_center = $_POST['collection_center'];
+$case_from = $_POST['case_from'];
+$case_to = $_POST['case_to'];
 
-$sql = "SELECT * FROM `patient` WHERE p_id='$regno' || fname
-LIKE '%$patient_name%' || lname LIKE '%$patient_name%'";
+$sql = "SELECT * FROM `patient` WHERE curr_time='00:00:00'"; 
+
+if ($regno != "") {
+    $sql .= "OR p_id='$regno'";
+}
+if ($patient_name != "") {
+    $sql .= "OR fname='$patient_name' OR lname='$patient_name' ";
+}
+if ($case_from != "NaN-NaN-NaN" && $case_to != "NaN-NaN-NaN") {
+    $sql .= "OR p_date BETWEEN '$case_from' AND '$case_to' ";
+}
+// echo
+// '<tr>
+//     <td>'.$sql.'</td>
+// </tr>';   
 $result = mysqli_query($conn, $sql) or Die("sql query failed");
 
 if (mysqli_num_rows($result)>0) {
@@ -34,9 +51,10 @@ if (mysqli_num_rows($result)>0) {
         </tr>';
     }
 }
-else
-echo
-'<tr>
-    <td>'.htmlentities("NO Record found",ENT_NOQUOTES,'UTF-8').'</td>
-</tr>';
+else{
+    echo
+    '<tr>
+        <td>'.htmlentities("NO Record found",ENT_NOQUOTES,'UTF-8').'</td>
+    </tr>';   
+}
 ?>

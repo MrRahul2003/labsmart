@@ -1,0 +1,43 @@
+<?php
+    include '../../Partials/Connect.php';
+?>
+<?php
+    if (isset($_POST['update'])) 
+    {
+        $id = mysqli_real_escape_string($conn,$_POST['id']);
+        $user_id = mysqli_real_escape_string($conn,$_POST['user_id']);
+        $device_id = mysqli_real_escape_string($conn,$_POST['device_id']);
+        $device_cat = mysqli_real_escape_string($conn,$_POST['device_cat']);
+        $device_name = mysqli_real_escape_string($conn,$_POST['device_name']);
+        $status = mysqli_real_escape_string($conn,$_POST['status']);
+        $payment = mysqli_real_escape_string($conn,$_POST['payment']);
+        $date_selected = mysqli_real_escape_string($conn,$_POST['date_selected']);
+        $submit_on = mysqli_real_escape_string($conn,$_POST['submit_on']);    
+
+        $sql = "UPDATE `sample_table` SET 
+        `id`= ?,
+        `user_id`= ?,
+        `device_id`= ?,
+        `device_cat`= ?,
+        `device_name`= ?,
+        `status`= ?,
+        `date_selected`= ?,
+        `pymnt`= ?,
+        `submit_on`= ? 
+        WHERE id = ?";
+        $result = mysqli_prepare($conn, $sql);
+
+        if ($result) {
+            mysqli_stmt_bind_param($result,'iiissssssi',$id,$user_id,
+            $device_id,$device_cat,$device_name,
+            $status,$date_selected,$payment,$submit_on,$id);
+            mysqli_stmt_execute($result);
+            echo mysqli_stmt_affected_rows($result);
+            // echo 1;
+            header("location: ../Main_Sample_Table.php"); 
+            exit();
+        } else {
+            echo 0;
+        }
+    }
+?>
